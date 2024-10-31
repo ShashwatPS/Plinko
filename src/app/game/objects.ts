@@ -1,5 +1,8 @@
 import { pad } from "./padding";
-import { ballRadius, sinkWidth, NUM_SINKS, WIDTH, HEIGHT, horizontalFriction, verticalFriction, gravity } from "./constants";
+import {
+    WIDTH,
+    obstacleRadius, sinkWidth, HEIGHT, NUM_SINKS
+} from "./constants";
 
 export interface Obstacle {
     x: number;
@@ -36,14 +39,33 @@ const MULTIPLIERS: {[ key: number ]: number} = {
 }
 
 
-export const createObstacles = ( ): Obstacle[] => {
+
+export const createObstacles = (): Obstacle[] => {
     const obstacles: Obstacle[] = [];
-    for (let i = 0; i < 10; i++) {
-        obstacles.push({
-            x: Math.random() * WIDTH,
-            y: Math.random() * HEIGHT,
-            radius: ballRadius
-        });
+    const rows = 18;
+    for (let row = 2; row < rows; row++) {
+        const numObstacles = row + 1;
+        const y = 0 + row * 35;
+        const spacing = 36;
+        for (let col = 0; col < numObstacles; col++) {
+            const x = WIDTH / 2 - spacing * (row / 2 - col);
+            obstacles.push({x: pad(x), y: pad(y), radius: obstacleRadius });
+        }
     }
     return obstacles;
+}
+
+export const createSinks = (): Sink[] => {
+    const sinks = [];
+    const SPACING = obstacleRadius * 2;
+
+    for (let i = 0; i < NUM_SINKS; i++) {
+        const x = WIDTH / 2 + sinkWidth * (i - Math.floor(NUM_SINKS/2)) - SPACING * 1.5;
+        const y = HEIGHT - 170;
+        const width = sinkWidth;
+        const height = width;
+        sinks.push({ x, y, width, height, multiplier: MULTIPLIERS[i+1] });
+    }
+
+    return sinks;
 }
