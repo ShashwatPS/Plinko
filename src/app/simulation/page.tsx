@@ -66,6 +66,9 @@ export default function Simulation() {
             <div className="flex flex-col items-center justify-center">
                 <canvas ref={canvasRef} width="800" height="800"></canvas>
             </div>
+            <div>
+
+            </div>
         </div>
     );
 }
